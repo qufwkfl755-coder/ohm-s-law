@@ -59,7 +59,7 @@
     </div>
 
     <!-- 상태 요약 및 액션 버튼들 -->
-    <div class="flex items-center gap-2.5">
+    <div class="flex items-center gap-2">
       <!-- 회로 구성 이력 실시간 배지 -->
       <div id="originBadge" class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all duration-200 bg-emerald-50 text-emerald-700 border-emerald-200">
         <i class="fa-solid fa-circle-check text-[11px]"></i>
@@ -67,26 +67,32 @@
       </div>
 
       <!-- 교과서 기본 회로 불러오기 버튼 -->
-      <button onclick="loadTextbookCircuit()" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="교과서 탐구 실험(250쪽) 회로 형태를 불러옵니다">
+      <button onclick="loadTextbookCircuit()" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="교과서 탐구 실험 회로를 불러옵니다">
         <i class="fa-solid fa-book-open-reader"></i>
         <span>교과서 기본 회로 불러오기</span>
       </button>
 
+      <!-- 니크롬선 교환 버튼 (긴선 ↔ 짧은선) -->
+      <button onclick="toggleNichromeResistor()" id="btnToggleResistor" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95" title="현재 연결된 니크롬선을 긴선 또는 짧은선으로 교환합니다">
+        <i class="fa-solid fa-arrows-rotate"></i>
+        <span id="txtToggleResistor">짧은 니크롬선으로 교환</span>
+      </button>
+
       <!-- 초기화 버튼 -->
-      <button onclick="resetLab()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition flex items-center gap-1.5 active:scale-95">
+      <button onclick="resetLab()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition flex items-center gap-1.5 active:scale-95">
         <i class="fa-solid fa-rotate-right"></i>
         <span>전체 비우기</span>
       </button>
 
       <!-- 수행평가 인증서 다운로드 버튼 -->
-      <button onclick="openSubmitModal()" class="px-3.5 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-md active:scale-95">
+      <button onclick="openSubmitModal()" class="px-3 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-md active:scale-95">
         <i class="fa-solid fa-award"></i>
-        <span>회로 제출 인증서 발급</span>
+        <span>인증서 발급</span>
       </button>
     </div>
   </header>
 
-  <!-- 2. 메인 바디 영역 (좌측 도구함 + 중앙 캔버스 + 우측 데이터 측정판) -->
+  <!-- 2. 메인 바디 영역 -->
   <div class="flex-1 flex overflow-hidden relative">
 
     <!-- [좌측 패널] 실험 준비물 보관함 & 전원 전압 조절기 -->
@@ -100,7 +106,6 @@
 
       <!-- 준비물 클릭 리스트 -->
       <div class="p-3 flex-1 overflow-y-auto space-y-2">
-        <!-- 집게 전선 추가 -->
         <button onclick="addWireItem()" class="w-full text-left p-2.5 rounded-xl border border-red-200 bg-red-50/70 hover:bg-red-100/70 transition flex items-center gap-3 group">
           <div class="w-8 h-8 rounded-lg bg-red-500 text-white flex items-center justify-center text-sm shadow-sm">
             <i class="fa-solid fa-diagram-project"></i>
@@ -111,7 +116,6 @@
           </div>
         </button>
 
-        <!-- 건전지 -->
         <button onclick="addDevice('battery')" class="w-full text-left p-2 rounded-xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 transition flex items-center gap-3">
           <div class="w-8 h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center text-sm shadow-sm">
             <i class="fa-solid fa-battery-full"></i>
@@ -122,7 +126,6 @@
           </div>
         </button>
 
-        <!-- 나이프 스위치 -->
         <button onclick="addDevice('switch')" class="w-full text-left p-2 rounded-xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 transition flex items-center gap-3">
           <div class="w-8 h-8 rounded-lg bg-amber-700 text-white flex items-center justify-center text-sm shadow-sm">
             <i class="fa-solid fa-toggle-on"></i>
@@ -133,7 +136,6 @@
           </div>
         </button>
 
-        <!-- 짧은 니크롬선 -->
         <button onclick="addDevice('resistorShort')" class="w-full text-left p-2 rounded-xl border border-slate-200 hover:border-emerald-400 hover:bg-emerald-50/40 transition flex items-center gap-3">
           <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center text-xs shadow-sm">
             <svg viewBox="0 0 30 16" class="w-5 h-3 stroke-white fill-none stroke-[2.2]">
@@ -146,7 +148,6 @@
           </div>
         </button>
 
-        <!-- 긴 니크롬선 -->
         <button onclick="addDevice('resistorLong')" class="w-full text-left p-2 rounded-xl border border-slate-200 hover:border-purple-400 hover:bg-purple-50/40 transition flex items-center gap-3">
           <div class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center text-xs shadow-sm">
             <svg viewBox="0 0 36 16" class="w-6 h-3 stroke-white fill-none stroke-[2.2]">
@@ -155,11 +156,10 @@
           </div>
           <div>
             <div class="text-xs font-bold text-slate-800">긴 니크롬선 (15Ω)</div>
-            <div class="text-[10px] text-purple-600 font-semibold">저항 큼 (교과서 규격)</div>
+            <div class="text-[10px] text-purple-600 font-semibold">저항 큼 (기본값)</div>
           </div>
         </button>
 
-        <!-- 전류 센서 -->
         <button onclick="addDevice('ammeter')" class="w-full text-left p-2 rounded-xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 transition flex items-center gap-3">
           <div class="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-extrabold text-xs shadow-sm">A</div>
           <div>
@@ -168,7 +168,6 @@
           </div>
         </button>
 
-        <!-- 전압 센서 -->
         <button onclick="addDevice('voltmeter')" class="w-full text-left p-2 rounded-xl border border-slate-200 hover:border-blue-400 hover:bg-blue-50/40 transition flex items-center gap-3">
           <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-extrabold text-xs shadow-sm">V</div>
           <div>
@@ -198,14 +197,13 @@
         </div>
 
         <div class="mt-3 p-2 bg-blue-50 rounded-lg border border-blue-200 text-[11px] text-blue-900 leading-relaxed">
-          <span class="font-bold">💡 팁:</span> 전압을 조금씩 조절하면서 스마트 센서 화면에 나타나는 전류($A$)의 변화를 관찰하세요.
+          <span class="font-bold">💡 팁:</span> 전압을 조절하며 전류 센서와 전압 센서 수치의 비례 관계를 확인해 보세요.
         </div>
       </div>
     </aside>
 
     <!-- [중앙 작업 공간] 회로 구성 캔버스 -->
     <main class="flex-1 relative lab-grid overflow-hidden" id="workspaceContainer">
-      <!-- SVG 전선 레이어 -->
       <svg id="wireLayer" class="absolute inset-0 w-full h-full pointer-events-none z-10">
         <defs>
           <filter id="glowEffect" x="-20%" y="-20%" width="140%" height="140%">
@@ -213,27 +211,20 @@
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
         </defs>
-        <!-- 동적 전선 요소 렌더링 -->
       </svg>
 
-      <!-- 부품 레이어 (HTML DOM) -->
       <div id="deviceLayer" class="absolute inset-0 z-10 pointer-events-none"></div>
 
-      <!-- 안내 툴팁 배너 (상단 중앙) -->
       <div class="absolute top-3 left-1/2 -translate-x-1/2 px-4 py-1.5 bg-white/90 backdrop-blur rounded-full border border-slate-300 shadow-md text-xs font-medium text-slate-700 z-20 flex items-center gap-2 pointer-events-none">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span>부품 단자(보라색 원)나 전선 몸통을 마우스로 끌어서 연결하세요. (극성 구분 없음)</span>
+        <span>부품 단자(보라색 원)를 마우스로 끌어서 도선으로 연결하세요.</span>
       </div>
 
-      <!-- 플로팅 상황 메뉴 툴바 (부품 또는 전선 클릭 시 팝업) -->
-      <div id="floatingActionToolbar" class="hidden absolute z-30 bg-slate-900/90 text-white rounded-full shadow-2xl px-2 py-1 flex items-center gap-1.5 backdrop-blur text-xs pop-in">
-        <!-- 버튼이 동적으로 삽입됩니다 -->
-      </div>
+      <div id="floatingActionToolbar" class="hidden absolute z-30 bg-slate-900/90 text-white rounded-full shadow-2xl px-2 py-1 flex items-center gap-1.5 backdrop-blur text-xs pop-in"></div>
     </main>
 
-    <!-- [우측 패널] 스마트 센서 계측 화면 & 활동지 작성용 데이터 기록표 -->
+    <!-- [우측 패널] 계측 모니터 및 표 -->
     <aside class="w-80 bg-white border-l border-slate-200 flex flex-col shrink-0 z-20 shadow-sm">
-      <!-- 실시간 스마트 계측기 LCD -->
       <div class="p-3 border-b border-slate-200 bg-slate-900 text-white">
         <div class="flex items-center justify-between text-slate-400 text-xs mb-2">
           <span class="font-bold flex items-center gap-1.5 text-white">
@@ -243,14 +234,12 @@
         </div>
 
         <div class="grid grid-cols-2 gap-2">
-          <!-- 전압 측정창 -->
           <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
             <div class="text-[10px] text-slate-400 font-bold mb-1 flex items-center gap-1">
               <span class="w-2 h-2 rounded-full bg-emerald-500"></span> 전압 센서 (V)
             </div>
             <div id="lcdVoltage" class="font-mono text-xl font-black text-emerald-400 text-right">0.00 V</div>
           </div>
-          <!-- 전류 측정창 -->
           <div class="bg-slate-950 p-2.5 rounded-xl border border-slate-800">
             <div class="text-[10px] text-slate-400 font-bold mb-1 flex items-center gap-1">
               <span class="w-2 h-2 rounded-full bg-blue-500"></span> 전류 센서 (A)
@@ -260,14 +249,12 @@
           </div>
         </div>
 
-        <!-- 측정값 표 기록 버튼 -->
         <button onclick="recordCurrentData()" class="mt-2.5 w-full py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition flex items-center justify-center gap-1.5 shadow active:scale-95">
           <i class="fa-solid fa-pen-to-square"></i>
           <span>현재 측정값을 실험 표에 기록하기</span>
         </button>
       </div>
 
-      <!-- 교과서 탐구 기록 데이터 테이블 -->
       <div class="p-3 flex-1 flex flex-col overflow-hidden bg-slate-50">
         <div class="flex items-center justify-between mb-2">
           <span class="text-xs font-bold text-slate-700 flex items-center gap-1">
@@ -288,7 +275,6 @@
               </tr>
             </thead>
             <tbody id="dataTableBody" class="divide-y divide-slate-100 font-mono text-[11px]">
-              <!-- 기록이 없을 때 기본 상태 -->
               <tr id="emptyTableRow">
                 <td colspan="5" class="py-8 text-slate-400 text-center font-sans text-xs">
                   상단의 <span class="font-bold text-blue-600">[기록하기]</span> 버튼을 눌러<br>측정값을 표에 누적하세요.
@@ -298,13 +284,12 @@
           </table>
         </div>
 
-        <!-- 활동지 작성 가이드 안내 배너 -->
         <div class="mt-3 p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-900 leading-relaxed shadow-sm">
           <div class="font-bold flex items-center gap-1.5 text-amber-800 mb-1">
             <i class="fa-solid fa-pencil"></i> 활동지 직접 작성 안내
           </div>
           <p class="text-[11px] text-slate-600">
-            위 표에 기록된 <span class="font-bold text-slate-800">전압($V$)</span>과 <span class="font-bold text-slate-800">전류($A$)</span> 값을 확인하고, 종이 활동지의 모눈종이 위에 직접 점을 찍어 전압-전류 그래프를 완성하세요.
+            기록된 <span class="font-bold text-slate-800">전압($V$)</span>과 <span class="font-bold text-slate-800">전류($A$)</span> 값을 바탕으로 $V-I$ 그래프를 종이 활동지에 작성해 보세요.
           </p>
         </div>
       </div>
@@ -322,19 +307,17 @@
       </div>
 
       <div class="p-5 space-y-4">
-        <!-- 학생 인적 사항 입력 -->
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-bold text-slate-700 mb-1">학번 (예: 20101)</label>
-            <input type="text" id="studentNumber" placeholder="학번 입력" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <label class="block text-xs font-bold text-slate-700 mb-1">학번</label>
+            <input type="text" id="studentNumber" placeholder="예: 20101" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
           </div>
           <div>
             <label class="block text-xs font-bold text-slate-700 mb-1">학생 성명</label>
-            <input type="text" id="studentName" placeholder="이름 입력" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <input type="text" id="studentName" placeholder="예: 홍길동" class="w-full px-3 py-1.5 border border-slate-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none">
           </div>
         </div>
 
-        <!-- 평가 기준 1 & 2 실시간 현황 판정 -->
         <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2 text-xs">
           <div class="flex items-center justify-between">
             <span class="font-medium text-slate-600">1. 회로 완성도 (통전 상태):</span>
@@ -346,11 +329,6 @@
           </div>
         </div>
 
-        <p class="text-[11px] text-slate-500 leading-tight">
-          * 다운로드 버튼을 누르면 학번, 이름, 회로 통전 결과, 그리고 구성된 회로 캡처 이미지가 담긴 파일(`회로인증_학번_이름.png`)이 저장됩니다.
-        </p>
-
-        <!-- 모달 하단 버튼 -->
         <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
           <button onclick="closeSubmitModal()" class="px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 rounded-lg transition">취소</button>
           <button onclick="downloadCertificate()" class="px-4 py-2 text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition shadow-md flex items-center gap-1.5">
@@ -361,7 +339,7 @@
     </div>
   </div>
 
-  <!-- 자바스크립트 전체 엔진 -->
+  <!-- 스크립트 엔진 -->
   <script>
     // --- 1. 전역 상태 (Global State) ---
     const state = {
@@ -369,28 +347,22 @@
       devices: [],
       wires: [],
       nextId: 1,
-      // 회로 구성 이력 추적 (치팅 방지 영구 보존 플래그)
       isTemplateLoaded: false,
       hasEverLoadedTemplate: false,
-      // 측정 데이터 기록 목록
       measurements: [],
-      // 회로 계산 결과
       circuitActive: false,
-      totalResistance: 10,
+      totalResistance: 15,
       totalCurrent: 0,
       measuredVoltage: 0,
-      // 선택 상태
       selectedDeviceId: null,
       selectedWireId: null
     };
 
-    // DOM 캐시
     const container = document.getElementById('workspaceContainer');
     const deviceLayer = document.getElementById('deviceLayer');
     const wireLayer = document.getElementById('wireLayer');
     const floatingToolbar = document.getElementById('floatingActionToolbar');
 
-    // 드래그 조작 제어 객체
     let dragTarget = null;
 
     // --- 2. 부품 템플릿 생성 헬퍼 ---
@@ -412,7 +384,7 @@
           stateVal = { closed: true };
           break;
         case 'resistorShort':
-          width = 145; height = 95;
+          width = 160; height = 95;
           name = '짧은 니크롬선 (5Ω)';
           resistance = 5;
           break;
@@ -433,7 +405,6 @@
 
       return {
         id, type, name, x, y, width, height, resistance, state: stateVal,
-        // 각 부품 단자 2개 (극성 구분 없는 단자 1, 단자 2)
         terminals: [
           { id: 1, relX: 30, relY: height - 16 },
           { id: 2, relX: width - 30, relY: height - 16 }
@@ -441,7 +412,7 @@
       };
     }
 
-    // --- 3. 부품 내부 실물 SVG 그래픽 생성기 ---
+    // --- 3. 부품 내부 SVG 그래픽 생성 ---
     function getDeviceInnerHtml(dev) {
       let visualContent = '';
 
@@ -479,7 +450,7 @@
               <rect x="10" y="24" width="90" height="5" rx="2" fill="#475569"/>
               <rect x="15" y="16" width="6" height="12" rx="1" fill="#0f172a"/>
               <rect x="89" y="16" width="6" height="12" rx="1" fill="#0f172a"/>
-              <path d="M 21 20 L 34 20 L 40 10 L 50 28 L 60 10 L 70 28 L 76 20 L 89 20" fill="none" stroke="#059669" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M 21 20 L 34 20 L 40 10 L 50 28 L 60 10 L 70 28 L 76 20 L 89 20" fill="none" stroke="#059669" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
         `;
@@ -490,7 +461,7 @@
               <rect x="6" y="24" width="118" height="5" rx="2" fill="#475569"/>
               <rect x="10" y="16" width="6" height="12" rx="1" fill="#0f172a"/>
               <rect x="114" y="16" width="6" height="12" rx="1" fill="#0f172a"/>
-              <path d="M 16 20 L 26 20 L 32 10 L 40 28 L 48 10 L 56 28 L 64 10 L 72 28 L 80 10 L 88 28 L 94 10 L 102 20 L 114 20" fill="none" stroke="#7c3aed" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M 16 20 L 26 20 L 32 10 L 40 28 L 48 10 L 56 28 L 64 10 L 72 28 L 80 10 L 88 28 L 94 10 L 102 20 L 114 20" fill="none" stroke="#7c3aed" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </div>
         `;
@@ -535,7 +506,7 @@
       `;
     }
 
-    // --- 4. 렌더링 엔진 (부품 & 전선) ---
+    // --- 4. 렌더링 엔진 ---
     function renderDevice(dev) {
       let el = document.getElementById(`device-${dev.id}`);
       if (!el) {
@@ -544,14 +515,12 @@
         el.className = 'absolute bg-white rounded-2xl shadow-md border border-slate-200 pointer-events-auto transition-shadow hover:shadow-lg';
         deviceLayer.appendChild(el);
 
-        // 부품 드래그 이벤트 등록
         el.addEventListener('mousedown', (e) => {
           if (e.target.closest('.device-terminal') || e.target.closest('button') || e.target.closest('.cursor-pointer')) return;
           startDeviceDrag(dev.id, e.clientX, e.clientY);
           e.stopPropagation();
         });
 
-        // 클릭 시 플로팅 툴바 고정 표시
         el.addEventListener('click', (e) => {
           if (e.target.closest('.device-terminal') || e.target.closest('button')) return;
           showDeviceToolbar(dev.id);
@@ -601,7 +570,6 @@
 
     function renderAllWires() {
       let svgHtml = '';
-      // 통전 시 밝은 시안/에메랄드 네온 빛, 미통전 시 일반 빨간색
       const wireCoreColor = state.circuitActive ? '#06b6d4' : '#ef4444';
       const wireGlowClass = state.circuitActive ? 'wire-neon-glow' : '';
 
@@ -613,13 +581,10 @@
 
         svgHtml += `
           <g id="wire-group-${w.id}" class="${wireGlowClass}">
-            <!-- 감도 높은 히트 영역 -->
             <line x1="${w.x1}" y1="${w.y1}" x2="${w.x2}" y2="${w.y2}" stroke="transparent" stroke-width="18" class="pointer-events-auto cursor-pointer" 
                   onmousedown="handleWireBodyMouseDown(${w.id}, event)" onclick="handleWireBodyClick(${w.id}, event)"/>
-            <!-- 실제 직선 도선 (네온 통전 시 밝은 코어 및 외곽 발광) -->
             ${state.circuitActive ? `<line x1="${w.x1}" y1="${w.y1}" x2="${w.x2}" y2="${w.y2}" stroke="#67e8f9" stroke-width="7" stroke-linecap="round" opacity="0.6"/>` : ''}
             <line x1="${w.x1}" y1="${w.y1}" x2="${w.x2}" y2="${w.y2}" stroke="${wireCoreColor}" stroke-width="4.5" stroke-linecap="round"/>
-            <!-- 양 끝단 집게 단자 (드래그 조절 핸들) -->
             <circle cx="${w.x1}" cy="${w.y1}" r="5" fill="${state.circuitActive ? '#0891b2' : '#334155'}" stroke="#ffffff" stroke-width="1.5" class="pointer-events-auto cursor-grab" 
                     onmousedown="handleWireEndMouseDown(${w.id}, 1, event)"/>
             <circle cx="${w.x2}" cy="${w.y2}" r="5" fill="${state.circuitActive ? '#0891b2' : '#334155'}" stroke="#ffffff" stroke-width="1.5" class="pointer-events-auto cursor-grab" 
@@ -627,7 +592,6 @@
           </g>
         `;
 
-        // T-분기점 노드 표시
         if (w.conn1 && w.conn1.type === 'wire') {
           svgHtml += `<circle cx="${w.x1}" cy="${w.y1}" r="5.5" fill="${state.circuitActive ? '#22d3ee' : '#10b981'}" stroke="#ffffff" stroke-width="2"/>`;
         }
@@ -639,15 +603,15 @@
       wireLayer.innerHTML = svgHtml;
     }
 
-    // --- 5. 회로 해석 및 옴의 법칙 시뮬레이션 엔진 ---
+    // --- 5. 회로 해석 및 옴의 법칙 시뮬레이션 ---
     function recalcCircuit() {
       const battery = state.devices.find(d => d.type === 'battery');
       if (!battery) {
-        setCircuitState(false, 10, 0, 0);
+        setCircuitState(false, 15, 0, 0);
         return;
       }
 
-      // 1. 도선(전선)을 통한 등전위 노드 묶음 (Union-Find)
+      // 1) 도선(직결/T분기)으로 묶인 등전위 노드(Net) 식별
       const parent = new Map();
       function find(i) {
         if (!parent.has(i)) parent.set(i, i);
@@ -662,10 +626,8 @@
         if (rootI !== rootJ) parent.set(rootI, rootJ);
       }
 
-      // 모든 도선과 연결된 단자들을 동일한 전기도선망(Net)으로 통합
       state.wires.forEach(w => {
         const wireNet = `wire_net_${w.id}`;
-        
         if (w.conn1) {
           if (w.conn1.type === 'device') {
             union(wireNet, `dev_${w.conn1.devId}_term_${w.conn1.termId}`);
@@ -682,7 +644,7 @@
         }
       });
 
-      // 2. 부품 간 연결 그래프 구축 (도선망 Net 기준)
+      // 2) 주 전도 그래프 구축 (전압계는 입력 임피던스가 무한대이므로 주 전류 경로에서 제외)
       const graph = new Map();
       function addGraphEdge(u, v, resistance, dev) {
         if (!graph.has(u)) graph.set(u, []);
@@ -694,51 +656,51 @@
       let switchIsOpen = false;
 
       state.devices.forEach(dev => {
-        if (dev.type === 'battery') return; // 배터리는 시작/도착점이므로 내부 엣지 제외
+        if (dev.type === 'battery') return;
 
         const net1 = find(`dev_${dev.id}_term_1`);
         const net2 = find(`dev_${dev.id}_term_2`);
 
         if (dev.type === 'switch') {
           if (dev.state && !dev.state.closed) {
-            switchIsOpen = true; // 열린 스위치는 통전 불가
+            switchIsOpen = true;
           } else {
             addGraphEdge(net1, net2, 0, dev);
           }
         } else if (dev.type === 'resistorShort' || dev.type === 'resistorLong') {
-          addGraphEdge(net1, net2, dev.resistance || 10, dev);
+          addGraphEdge(net1, net2, dev.resistance || 15, dev);
         } else if (dev.type === 'ammeter') {
-          // 전류 센서는 직렬 센서 (저항 0으로 도통)
+          // 전류계는 직렬 센서(내부 저항 0으로 도통)
           addGraphEdge(net1, net2, 0, dev);
-        } else if (dev.type === 'voltmeter') {
-          // 전압 센서는 내부 저항이 매우 커서 주 전류는 통과시키지 않음 (병렬 계측용)
         }
       });
 
-      // 3. 배터리 양극 간 폐회로(Closed Loop) 경로 탐색 (BFS)
       const battNet1 = find(`dev_${battery.id}_term_1`);
       const battNet2 = find(`dev_${battery.id}_term_2`);
 
+      // 단락(쇼트) 방어: 배터리 양극이 직접 연결된 경우
       if (battNet1 === battNet2) {
-        // 단락(쇼트) 방어
-        setCircuitState(false, 10, 0, 0);
+        setCircuitState(false, 15, 0, 0);
         return;
       }
 
+      // 3) 배터리 양극 간 폐회로 경로 탐색 (BFS)
       let isClosed = false;
       let totalR = 0;
       let pathDevices = [];
+      let pathEdges = [];
 
-      const queue = [[battNet1, [battNet1], 0, []]];
+      const queue = [[battNet1, [battNet1], 0, [], []]];
       const visited = new Set([battNet1]);
 
       while (queue.length > 0) {
-        const [curr, path, rAcc, devs] = queue.shift();
+        const [curr, path, rAcc, devs, edgesUsed] = queue.shift();
 
         if (curr === battNet2) {
           isClosed = true;
           totalR = rAcc;
           pathDevices = devs;
+          pathEdges = edgesUsed;
           break;
         }
 
@@ -746,47 +708,64 @@
         for (const edge of edges) {
           if (!visited.has(edge.to)) {
             visited.add(edge.to);
-            queue.push([edge.to, [...path, edge.to], rAcc + edge.r, [...devs, edge.dev]]);
+            queue.push([edge.to, [...path, edge.to], rAcc + edge.r, [...devs, edge.dev], [...edgesUsed, edge]]);
           }
         }
       }
 
-      // 회로가 닫히고 스위치가 닫혀 있는 경우
+      // 회로가 닫히고, 열린 스위치가 없으며, 유효 저항이 존재하는 경우
       if (isClosed && !switchIsOpen && totalR > 0) {
-        const currentA = state.batteryVoltage / totalR;
+        const loopCurrent = state.batteryVoltage / totalR;
 
-        // 전압 센서가 회로의 어떤 전기도선망에 물려 있는지 측정
+        // 전류계 측정: 폐회로 주 경로 상에 전류계가 포함되어 있는지 판정
+        const ammeterDev = state.devices.find(d => d.type === 'ammeter');
+        let measuredCurrent = 0;
+        if (ammeterDev) {
+          const aInLoop = pathDevices.some(d => d.id === ammeterDev.id);
+          measuredCurrent = aInLoop ? loopCurrent : 0;
+        } else {
+          measuredCurrent = loopCurrent;
+        }
+
+        // 4) 각 노드의 전위(Potential) 계산
+        // 배터리 음극(term2)을 기준 전위 0V, 양극(term1)을 battVoltage로 설정
+        const potential = new Map();
+        potential.set(battNet2, 0);
+        potential.set(battNet1, state.batteryVoltage);
+
+        // 폐회로 경로를 따라 전압 강하(IR Drop) 적용
+        let curNet = battNet1;
+        let curV = state.batteryVoltage;
+        for (const edge of pathEdges) {
+          const drop = loopCurrent * edge.r;
+          curV -= drop;
+          potential.set(edge.to, Math.max(0, curV));
+          curNet = edge.to;
+        }
+
+        // 전압계 측정: 연결된 두 단자의 노드 전위차(절댓값)를 측정
         let measuredV = 0;
         const voltMeter = state.devices.find(d => d.type === 'voltmeter');
         if (voltMeter) {
           const vNet1 = find(`dev_${voltMeter.id}_term_1`);
           const vNet2 = find(`dev_${voltMeter.id}_term_2`);
 
-          // 회로 내 활성 저항(니크롬선) 탐색
-          const nichrome = state.devices.find(d => d.type === 'resistorShort' || d.type === 'resistorLong');
-          if (nichrome) {
-            const nNet1 = find(`dev_${nichrome.id}_term_1`);
-            const nNet2 = find(`dev_${nichrome.id}_term_2`);
-            // 전압계 양 단자가 니크롬선 양단과 연결된 경우 니크롬선 양단 전압 계산 (옴의 법칙 V = I * R)
-            if ((vNet1 === nNet1 && vNet2 === nNet2) || (vNet1 === nNet2 && vNet2 === nNet1)) {
-              measuredV = currentA * nichrome.resistance;
-            } else if ((vNet1 === battNet1 && vNet2 === battNet2) || (vNet1 === battNet2 && vNet2 === battNet1)) {
-              measuredV = state.batteryVoltage;
-            } else {
-              measuredV = currentA * (nichrome.resistance || 5);
-            }
+          const p1 = potential.has(vNet1) ? potential.get(vNet1) : null;
+          const p2 = potential.has(vNet2) ? potential.get(vNet2) : null;
+
+          if (p1 !== null && p2 !== null) {
+            measuredV = Math.abs(p1 - p2);
           } else {
-            measuredV = state.batteryVoltage;
+            measuredV = 0;
           }
         } else {
-          // 전압계가 없더라도 기본 전압 반영
-          const activeR = state.devices.find(d => d.type === 'resistorShort' || d.type === 'resistorLong');
-          measuredV = activeR ? currentA * activeR.resistance : state.batteryVoltage;
+          // 전압계가 캔버스에 없을 경우 회로 저항 양단의 기본 전압 표시
+          measuredV = state.batteryVoltage;
         }
 
-        setCircuitState(true, totalR, currentA, measuredV);
+        setCircuitState(true, totalR, measuredCurrent, measuredV);
       } else {
-        setCircuitState(false, 10, 0, 0);
+        setCircuitState(false, 15, 0, 0);
       }
     }
 
@@ -796,7 +775,6 @@
       state.totalCurrent = active ? i : 0;
       state.measuredVoltage = active ? v : 0;
 
-      // 센서 계측창 UI 실시간 갱신
       const lcdV = document.getElementById('lcdVoltage');
       const lcdI = document.getElementById('lcdCurrent');
       const lcdM = document.getElementById('lcdCurrentMilli');
@@ -806,6 +784,7 @@
 
       renderAllDevices();
       renderAllWires();
+      updateResistorToggleButton();
     }
 
     // --- 6. 드래그 앤 드롭 및 연결 상호작용 ---
@@ -878,116 +857,6 @@
       showWireToolbar(wireId, e.clientX, e.clientY);
     }
 
-    // 마우스 이동 & 드래그 이벤트
-    window.addEventListener('mousemove', (e) => {
-      if (!dragTarget) return;
-
-      const contRect = container.getBoundingClientRect();
-      const mouseX = e.clientX - contRect.left;
-      const mouseY = e.clientY - contRect.top;
-
-      if (dragTarget.type === 'device') {
-        const dx = e.clientX - dragTarget.startX;
-        const dy = e.clientY - dragTarget.startY;
-        if (Math.hypot(dx, dy) > 4) {
-          dragTarget.moved = true;
-          hideFloatingToolbar();
-        }
-        const dev = state.devices.find(d => d.id === dragTarget.id);
-        if (dev) {
-          dev.x = Math.max(10, Math.min(contRect.width - dev.width - 10, dragTarget.origX + dx));
-          dev.y = Math.max(10, Math.min(contRect.height - dev.height - 10, dragTarget.origY + dy));
-          renderDevice(dev);
-          renderAllWires();
-        }
-      } else if (dragTarget.type === 'wireEnd') {
-        const wire = state.wires.find(w => w.id === dragTarget.wireId);
-        if (wire) {
-          if (dragTarget.endNum === 1) {
-            wire.x1 = mouseX; wire.y1 = mouseY;
-          } else {
-            wire.x2 = mouseX; wire.y2 = mouseY;
-          }
-          renderAllWires();
-        }
-      } else if (dragTarget.type === 'wireBody') {
-        const dx = e.clientX - dragTarget.startX;
-        const dy = e.clientY - dragTarget.startY;
-        if (Math.hypot(dx, dy) > 4) {
-          dragTarget.moved = true;
-          hideFloatingToolbar();
-        }
-        const wire = state.wires.find(w => w.id === dragTarget.wireId);
-        if (wire) {
-          wire.x1 = dragTarget.origX1 + dx; wire.y1 = dragTarget.origY1 + dy;
-          wire.x2 = dragTarget.origX2 + dx; wire.y2 = dragTarget.origY2 + dy;
-          wire.conn1 = null;
-          wire.conn2 = null;
-          renderAllWires();
-        }
-      }
-    });
-
-    // 마우스 드롭 & 단자 스냅 판정
-    window.addEventListener('mouseup', (e) => {
-      if (!dragTarget) return;
-
-      const contRect = container.getBoundingClientRect();
-      const mouseX = e.clientX - contRect.left;
-      const mouseY = e.clientY - contRect.top;
-
-      if (dragTarget.type === 'wireEnd') {
-        const wire = state.wires.find(w => w.id === dragTarget.wireId);
-        if (wire) {
-          let snapped = false;
-
-          // 1) 부품 단자 스냅 (극성 구분 없이 26px 반경 자동 결합)
-          for (const dev of state.devices) {
-            for (const term of dev.terminals) {
-              const tPos = getTerminalAbsolutePos(dev.id, term.id);
-              if (Math.hypot(mouseX - tPos.x, mouseY - tPos.y) < 26) {
-                if (dragTarget.endNum === 1) {
-                  wire.x1 = tPos.x; wire.y1 = tPos.y;
-                  wire.conn1 = { type: 'device', devId: dev.id, termId: term.id };
-                } else {
-                  wire.x2 = tPos.x; wire.y2 = tPos.y;
-                  wire.conn2 = { type: 'device', devId: dev.id, termId: term.id };
-                }
-                snapped = true;
-                break;
-              }
-            }
-            if (snapped) break;
-          }
-
-          // 2) 다른 도선 몸통 스냅 (T-분기 병렬 연결)
-          if (!snapped) {
-            for (const otherWire of state.wires) {
-              if (otherWire.id === wire.id) continue;
-              const distInfo = pointToSegmentDistance(mouseX, mouseY, otherWire.x1, otherWire.y1, otherWire.x2, otherWire.y2);
-              if (distInfo.dist < 18) {
-                if (dragTarget.endNum === 1) {
-                  wire.x1 = distInfo.px; wire.y1 = distInfo.py;
-                  wire.conn1 = { type: 'wire', wireId: otherWire.id, t: distInfo.t };
-                } else {
-                  wire.x2 = distInfo.px; wire.y2 = distInfo.py;
-                  wire.conn2 = { type: 'wire', wireId: otherWire.id, t: distInfo.t };
-                }
-                snapped = true;
-                break;
-              }
-            }
-          }
-
-          renderAllWires();
-          recalcCircuit();
-        }
-      }
-
-      dragTarget = null;
-    });
-
-    // 점과 선분 간 거리 계산 함수
     function pointToSegmentDistance(px, py, x1, y1, x2, y2) {
       const dx = x2 - x1, dy = y2 - y1;
       const lenSq = dx * dx + dy * dy;
@@ -999,9 +868,7 @@
       return { dist: Math.hypot(px - projX, py - projY), px: projX, py: projY, t };
     }
 
-    // 근접 단자 또는 전선 스냅 좌표를 찾아주는 헬퍼 (자석 효과)
     function findSnapTarget(x, y, excludeWireId = null) {
-      // 1) 부품 단자 근접 검사 (반경 32px 이내면 즉시 스냅)
       for (const dev of state.devices) {
         for (const term of dev.terminals) {
           const tPos = getTerminalAbsolutePos(dev.id, term.id);
@@ -1016,7 +883,6 @@
         }
       }
 
-      // 2) 다른 전선 몸통 근접 검사 (반경 22px 이내면 T-분기 스냅)
       for (const otherWire of state.wires) {
         if (otherWire.id === excludeWireId) continue;
         const distInfo = pointToSegmentDistance(x, y, otherWire.x1, otherWire.y1, otherWire.x2, otherWire.y2);
@@ -1033,7 +899,6 @@
       return { snapped: false, x, y, conn: null };
     }
 
-    // 마우스 이동 & 드래그 이벤트
     window.addEventListener('mousemove', (e) => {
       if (!dragTarget) return;
 
@@ -1058,14 +923,11 @@
       } else if (dragTarget.type === 'wireEnd') {
         const wire = state.wires.find(w => w.id === dragTarget.wireId);
         if (wire) {
-          // 실시간 자석 스냅 감지 및 미리보기
           const snap = findSnapTarget(mouseX, mouseY, wire.id);
           if (dragTarget.endNum === 1) {
-            wire.x1 = snap.x;
-            wire.y1 = snap.y;
+            wire.x1 = snap.x; wire.y1 = snap.y;
           } else {
-            wire.x2 = snap.x;
-            wire.y2 = snap.y;
+            wire.x2 = snap.x; wire.y2 = snap.y;
           }
           renderAllWires();
         }
@@ -1087,7 +949,6 @@
       }
     });
 
-    // 마우스 드롭 & 단자 스냅 확정 판정
     window.addEventListener('mouseup', (e) => {
       if (!dragTarget) return;
 
@@ -1100,20 +961,16 @@
         if (wire) {
           const snap = findSnapTarget(mouseX, mouseY, wire.id);
           if (dragTarget.endNum === 1) {
-            wire.x1 = snap.x;
-            wire.y1 = snap.y;
+            wire.x1 = snap.x; wire.y1 = snap.y;
             wire.conn1 = snap.conn;
           } else {
-            wire.x2 = snap.x;
-            wire.y2 = snap.y;
+            wire.x2 = snap.x; wire.y2 = snap.y;
             wire.conn2 = snap.conn;
           }
-
           renderAllWires();
           recalcCircuit();
         }
       }
-
       dragTarget = null;
     });
 
@@ -1170,6 +1027,7 @@
       if (el) el.remove();
       hideFloatingToolbar();
       recalcCircuit();
+      updateResistorToggleButton();
     }
 
     function disconnectDeviceWires(devId) {
@@ -1192,12 +1050,11 @@
       }
     }
 
-    // --- 8. 부품 추가 및 전원 설정 ---
+    // --- 7. 부품 추가 및 전원 설정 ---
     function addDevice(type) {
       const rect = container.getBoundingClientRect();
       const W = rect.width > 200 ? rect.width : 900;
       const H = rect.height > 200 ? rect.height : 600;
-      // 화면 중앙 부근에 임의의 여백을 두고 배치
       const randX = W * 0.35 + (Math.random() * 80 - 40);
       const randY = H * 0.35 + (Math.random() * 80 - 40);
 
@@ -1205,6 +1062,7 @@
       state.devices.push(dev);
       renderDevice(dev);
       recalcCircuit();
+      updateResistorToggleButton();
     }
 
     function addWireItem() {
@@ -1218,12 +1076,9 @@
 
       const newWire = {
         id: wireId,
-        x1: centerX - 70,
-        y1: centerY,
-        x2: centerX + 70,
-        y2: centerY,
-        conn1: null,
-        conn2: null
+        x1: centerX - 70, y1: centerY,
+        x2: centerX + 70, y2: centerY,
+        conn1: null, conn2: null
       };
 
       state.wires.push(newWire);
@@ -1236,18 +1091,16 @@
       const txt = document.getElementById('txtBatteryVoltage');
       if (txt) txt.innerText = `${state.batteryVoltage.toFixed(1)} V`;
 
-      // 배터리 외관 그래픽 업데이트
       state.devices.filter(d => d.type === 'battery').forEach(b => renderDevice(b));
       recalcCircuit();
     }
 
-    // --- 9. 교과서 기본 회로 불러오기 (첨부 이미지와 100% 동일한 위치 및 형태) ---
+    // --- 8. 교과서 기본 회로 불러오기 (캡처 이미지 위치 및 모양 100% 반영) ---
     function loadTextbookCircuit() {
-      // 템플릿 로드 플래그 활성화 (초기화를 누르기 전까지는 계속 '교과서 기본회로 그대로 활용' 상태)
       state.isTemplateLoaded = true;
       state.hasEverLoadedTemplate = true;
 
-      // 캔버스 초기화 (이력은 보존)
+      // 화면 초기화
       state.devices = [];
       state.wires = [];
       state.circuitActive = false;
@@ -1262,72 +1115,105 @@
       const W = contRect.width > 200 ? contRect.width : 900;
       const H = contRect.height > 200 ? contRect.height : 600;
 
-      // 1) 5개 소자 좌표 배치 (첨부 이미지 레이아웃 반영)
-      // 전류 센서: 좌측 최상단
-      const ammeter = createDevice('ammeter', W * 0.04, H * 0.08);
-      // 긴 니크롬선: 우측 최상단
-      const nichrome = createDevice('resistorLong', W * 0.72, H * 0.08);
-      // 전압 센서: 우측 상단 중앙
-      const voltmeter = createDevice('voltmeter', W * 0.60, H * 0.32);
-      // 실험용 건전지: 좌측 최하단
-      const battery = createDevice('battery', W * 0.12, H * 0.72);
-      // 실험용 스위치: 우측 최하단
-      const sw = createDevice('switch', W * 0.74, H * 0.72);
+      // 1) 4개 부품 배치 (상단 건전지, 중앙 전압센서, 우측 전류센서, 좌측하단 긴 니크롬선)
+      const battery = createDevice('battery', W * 0.36, H * 0.05);
+      const voltmeter = createDevice('voltmeter', W * 0.30, H * 0.45);
+      const ammeter = createDevice('ammeter', W * 0.72, H * 0.45);
+      const nichrome = createDevice('resistorLong', W * 0.06, H * 0.73);
 
-      state.devices = [ammeter, nichrome, voltmeter, battery, sw];
+      state.devices = [battery, voltmeter, ammeter, nichrome];
       renderAllDevices();
 
-      // 2) 기준 도선 4개 (직사각형 외곽 루프)
-      // [상단 가로 도선]: 전류 센서 단자2 -> 긴 니크롬선 단자1
-      const wTop = {
+      // 2) 5개 도선 연결 (캡처 이미지 결선 완벽 재현)
+      // 전선 1: 건전지 단자1 -> 긴 니크롬선 단자1
+      const w1 = {
         id: state.nextId++,
-        conn1: { type: 'device', devId: ammeter.id, termId: 2 },
+        conn1: { type: 'device', devId: battery.id, termId: 1 },
         conn2: { type: 'device', devId: nichrome.id, termId: 1 }
       };
 
-      // [우측 세로 도선]: 긴 니크롬선 단자2 -> 스위치 단자2
-      const wRight = {
+      // 전선 2: 긴 니크롬선 단자1 -> 전압 센서 단자1 (병렬 연결)
+      const w2 = {
         id: state.nextId++,
-        conn1: { type: 'device', devId: nichrome.id, termId: 2 },
-        conn2: { type: 'device', devId: sw.id, termId: 2 }
-      };
-
-      // [하단 가로 도선]: 스위치 단자1 -> 건전지 단자2
-      const wBottom = {
-        id: state.nextId++,
-        conn1: { type: 'device', devId: sw.id, termId: 1 },
-        conn2: { type: 'device', devId: battery.id, termId: 2 }
-      };
-
-      // [좌측 세로 도선]: 건전지 단자1 -> 전류 센서 단자2
-      const wLeft = {
-        id: state.nextId++,
-        conn1: { type: 'device', devId: battery.id, termId: 1 },
-        conn2: { type: 'device', devId: ammeter.id, termId: 2 }
-      };
-
-      // 3) 전압 센서 병렬 연결 (사선 T-분기 도선 2개)
-      // 전압 센서 단자1 -> 상단 가로 도선 중간 분기점(t = 0.52)
-      const wVoltBranch1 = {
-        id: state.nextId++,
-        conn1: { type: 'wire', wireId: wTop.id, t: 0.52 },
+        conn1: { type: 'device', devId: nichrome.id, termId: 1 },
         conn2: { type: 'device', devId: voltmeter.id, termId: 1 }
       };
 
-      // 전압 센서 단자2 -> 우측 세로 도선 중간 분기점(t = 0.58)
-      const wVoltBranch2 = {
+      // 전선 3: 긴 니크롬선 단자2 -> 전압 센서 단자2 (병렬 연결)
+      const w3 = {
         id: state.nextId++,
-        conn1: { type: 'device', devId: voltmeter.id, termId: 2 },
-        conn2: { type: 'wire', wireId: wRight.id, t: 0.58 }
+        conn1: { type: 'device', devId: nichrome.id, termId: 2 },
+        conn2: { type: 'device', devId: voltmeter.id, termId: 2 }
       };
 
-      state.wires = [wTop, wRight, wBottom, wLeft, wVoltBranch1, wVoltBranch2];
+      // 전선 4: 긴 니크롬선 단자2 -> 전류 센서 단자1 (직렬 루프)
+      const w4 = {
+        id: state.nextId++,
+        conn1: { type: 'device', devId: nichrome.id, termId: 2 },
+        conn2: { type: 'device', devId: ammeter.id, termId: 1 }
+      };
+
+      // 전선 5: 건전지 단자2 -> 전류 센서 단자2 (직렬 루프 완성)
+      const w5 = {
+        id: state.nextId++,
+        conn1: { type: 'device', devId: battery.id, termId: 2 },
+        conn2: { type: 'device', devId: ammeter.id, termId: 2 }
+      };
+
+      state.wires = [w1, w2, w3, w4, w5];
 
       renderAllWires();
       recalcCircuit();
+      updateResistorToggleButton();
     }
 
-    // --- 10. 초기화 및 3단계 이력 배지 갱신 ---
+    // --- 9. 니크롬선 교환 버튼 로직 (긴 니크롬선 ↔ 짧은 니크롬선) ---
+    function toggleNichromeResistor() {
+      const resIdx = state.devices.findIndex(d => d.type === 'resistorLong' || d.type === 'resistorShort');
+      
+      if (resIdx === -1) {
+        return;
+      }
+
+      const curDev = state.devices[resIdx];
+      const isCurrentlyLong = curDev.type === 'resistorLong';
+
+      // 타입 및 사양 교환 (단자 결선 보존)
+      if (isCurrentlyLong) {
+        curDev.type = 'resistorShort';
+        curDev.name = '짧은 니크롬선 (5Ω)';
+        curDev.resistance = 5;
+      } else {
+        curDev.type = 'resistorLong';
+        curDev.name = '긴 니크롬선 (15Ω)';
+        curDev.resistance = 15;
+      }
+
+      renderDevice(curDev);
+      recalcCircuit();
+      updateResistorToggleButton();
+    }
+
+    function updateResistorToggleButton() {
+      const btn = document.getElementById('btnToggleResistor');
+      const txt = document.getElementById('txtToggleResistor');
+      if (!btn || !txt) return;
+
+      const res = state.devices.find(d => d.type === 'resistorLong' || d.type === 'resistorShort');
+      if (res) {
+        if (res.type === 'resistorLong') {
+          txt.innerText = '짧은 니크롬선으로 교환';
+          btn.className = 'px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95';
+        } else {
+          txt.innerText = '긴 니크롬선으로 교환';
+          btn.className = 'px-3 py-1.5 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95';
+        }
+      } else {
+        txt.innerText = '니크롬선 교환';
+      }
+    }
+
+    // --- 10. 초기화 및 배지 ---
     function resetLab(isInternalReset = false) {
       state.devices = [];
       state.wires = [];
@@ -1338,16 +1224,13 @@
       wireLayer.innerHTML = '';
       hideFloatingToolbar();
 
-      // 사용자가 [전체 비우기(초기화)] 버튼을 직접 누른 경우:
-      // 기본 회로 템플릿 사용 상태를 해제함.
-      // (만약 기본회로를 불러왔던 이력이 있다면 hasEverLoadedTemplate = true이므로
-      //  이후부터는 '교과서 기본회로 확인 후 자율 구성'으로 전환됨)
       if (!isInternalReset) {
         state.isTemplateLoaded = false;
       }
 
       updateOriginBadge();
       recalcCircuit();
+      updateResistorToggleButton();
     }
 
     function getOriginStatusText() {
@@ -1365,7 +1248,6 @@
       const text = document.getElementById('originBadgeText');
 
       badge.className = 'hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all duration-200';
-
       const status = getOriginStatusText();
       text.innerText = status;
 
@@ -1378,15 +1260,14 @@
       }
     }
 
-    // --- 11. 실험 데이터 표 기록 관리 ---
+    // --- 11. 데이터 기록 ---
     function recordCurrentData() {
       if (!state.circuitActive) {
-        alert('회로가 완성되지 않았거나 스위치가 열려 있습니다. 전선에 네온 빛이 들어온 상태에서 기록하세요.');
         return;
       }
 
       const activeRes = state.devices.find(d => d.type === 'resistorLong' || d.type === 'resistorShort');
-      const resName = activeRes ? (activeRes.type === 'resistorLong' ? '긴 니크롬선' : '짧은 니크롬선') : '저항선';
+      const resName = activeRes ? (activeRes.type === 'resistorLong' ? '긴 니크롬선 (15Ω)' : '짧은 니크롬선 (5Ω)') : '저항선';
 
       const row = {
         count: state.measurements.length + 1,
@@ -1433,7 +1314,7 @@
       renderDataTable();
     }
 
-    // --- 12. 수행평가 결과 인증서 발급 & PNG 다운로드 ---
+    // --- 12. 인증서 모달 및 PNG 생성 ---
     function openSubmitModal() {
       const modal = document.getElementById('submitModal');
       const txtStatus = document.getElementById('modalCircuitStatus');
@@ -1472,15 +1353,12 @@
       canvas.height = 760;
       const ctx = canvas.getContext('2d');
 
-      // 1) 배경 그리기
       ctx.fillStyle = '#ffffff';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 상단 테두리 장식
       ctx.fillStyle = '#2563eb';
       ctx.fillRect(0, 0, canvas.width, 10);
 
-      // 2) 타이틀 영역
       ctx.fillStyle = '#0f172a';
       ctx.font = 'bold 24px Pretendard, sans-serif';
       ctx.fillText('중학교 과학 2학년 [전기와 자기] 수행평가 회로 제출 인증서', 40, 50);
@@ -1489,7 +1367,6 @@
       ctx.font = '13px Pretendard, sans-serif';
       ctx.fillText(`발급 일시: ${new Date().toLocaleString('ko-KR')} | 실험 과제: 옴의 법칙 탐구 회로 구성`, 40, 75);
 
-      // 3) 학생 정보 및 평가 판정 카드 박스
       ctx.fillStyle = '#f8fafc';
       ctx.strokeStyle = '#e2e8f0';
       ctx.lineWidth = 1.5;
@@ -1514,7 +1391,6 @@
       ctx.fillStyle = '#334155';
       ctx.fillText(`${originBadgeIcon} 2. 회로 구성 이력: ${status}`, 460, 160);
 
-      // 4) 회로 구성 스냅샷 영역
       ctx.fillStyle = '#f1f5f9';
       ctx.strokeStyle = '#cbd5e1';
       ctx.lineWidth = 1.5;
@@ -1523,7 +1399,6 @@
       ctx.fill();
       ctx.stroke();
 
-      // 모눈 그리드 시각화
       ctx.strokeStyle = 'rgba(203, 213, 225, 0.4)';
       ctx.lineWidth = 1;
       for (let x = 40; x < 960; x += 24) {
@@ -1533,7 +1408,6 @@
         ctx.beginPath(); ctx.moveTo(40, y); ctx.lineTo(960, y); ctx.stroke();
       }
 
-      // 회로 전선 렌더링
       const contRect = container.getBoundingClientRect();
       const scaleX = 920 / (contRect.width || 900);
       const scaleY = 520 / (contRect.height || 600);
@@ -1556,7 +1430,6 @@
         ctx.beginPath(); ctx.arc(wx2, wy2, 4, 0, Math.PI * 2); ctx.fill();
       });
 
-      // 부품 렌더링
       state.devices.forEach(dev => {
         const dx = 40 + dev.x * scaleX;
         const dy = 200 + dev.y * scaleY;
@@ -1576,7 +1449,6 @@
         ctx.fillText(dev.name, dx + 8, dy + 18);
       });
 
-      // 이미지 다운로드 실행
       const link = document.createElement('a');
       link.download = `회로인증_${sNum}_${sName}.png`;
       link.href = canvas.toDataURL('image/png');
@@ -1587,6 +1459,7 @@
 
     // 전역 함수 등록
     window.loadTextbookCircuit = loadTextbookCircuit;
+    window.toggleNichromeResistor = toggleNichromeResistor;
     window.resetLab = resetLab;
     window.addDevice = addDevice;
     window.addWireItem = addWireItem;
@@ -1605,10 +1478,12 @@
     window.handleWireBodyClick = handleWireBodyClick;
     window.handleWireEndMouseDown = handleWireEndMouseDown;
 
-    // 초기 실행
+    // 초기 접속 시에는 빈 화면으로 시작하여 자율 구성을 유도
     window.onload = function() {
+      resetLab(true);
       updateOriginBadge();
       recalcCircuit();
+      updateResistorToggleButton();
     };
   </script>
 </body>
